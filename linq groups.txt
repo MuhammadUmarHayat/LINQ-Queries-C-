@@ -1,0 +1,24 @@
+Group products by category:
+var productsByCategory = from p in dbContext.Products
+                         group p by p.Category into g
+                         select new { Category = g.Key, Products = g };
+
+Group orders by customer:
+var ordersByCustomer = from o in dbContext.Orders
+                       group o by o.Customer into g
+                       select new { Customer = g.Key, Orders = g };
+
+Group products by price range:
+var productsByPriceRange = from p in dbContext.Products
+                           let priceRange = p.Price < 50.00m ? "Inexpensive" : p.Price < 100.00m ? "Moderate" : "Expensive"
+                           group p by priceRange into g
+                           select new { PriceRange = g.Key, Products = g };
+Group orders by year and month:
+var ordersByYearAndMonth = from o in dbContext.Orders
+                           group o by new { o.OrderDate.Year, o.OrderDate.Month } into g
+                           select new { Year = g.Key.Year, Month = g.Key.Month, Orders = g };
+
+Group products by availability:
+var productsByAvailability = from p in dbContext.Products
+                             group p by p.StockQuantity > 0 into g
+                             select new { InStock = g.Key, Products = g };

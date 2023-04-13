@@ -1,0 +1,57 @@
+Retrieve all products:
+var products = from p in dbContext.Products
+               select p;
+Retrieve all products that are currently in stock:
+var inStockProducts = from p in dbContext.Products
+                      where p.StockQuantity > 0
+                      select p;
+Retrieve all products in a specific category:
+var categoryProducts = from p in dbContext.Products
+                       where p.Category == "Electronics"
+                       select p;
+Retrieve all products that have a price less than a certain amount:
+var inexpensiveProducts = from p in dbContext.Products
+                          where p.Price < 50.00m
+                          select p;
+Retrieve all orders for a specific customer:
+var customerOrders = from o in dbContext.Orders
+                     where o.CustomerId == 1234
+                     select o;
+
+Retrieve all orders that contain a specific product:
+var productOrders = from o in dbContext.Orders
+                    from op in o.OrderProducts
+                    where op.ProductId == 5678
+                    select o;
+Retrieve the total sales for a specific product:
+var productSales = (from o in dbContext.Orders
+                    from op in o.OrderProducts
+                    where op.ProductId == 5678
+                    select op.Quantity * op.UnitPrice).Sum();
+
+
+Retrieve all customers who have made a purchase within a certain date range:
+var recentCustomers = from c in dbContext.Customers
+                      where c.Orders.Any(o => o.OrderDate >= new DateTime(2022, 01, 01) && o.OrderDate <= new DateTime(2022, 12, 31))
+                      select c;
+
+Retrieve the top-selling products:
+var topSellingProducts = from op in dbContext.OrderProducts
+                         group op by op.Product into g
+                         orderby g.Sum(op => op.Quantity) descending
+                         select g.Key;
+Retrieve the total revenue for a specific time period:
+var totalRevenue = (from o in dbContext.Orders
+                    where o.OrderDate >= new DateTime(2022, 01, 01) && o.OrderDate <= new DateTime(2022, 12, 31)
+                    select o.TotalPrice).Sum();
+Retrieve all orders with a total price greater than a certain amount:
+var expensiveOrders = from o in dbContext.Orders
+                      where o.TotalPrice > 1000.00m
+                      select o;
+
+Retrieve the number of products in each category:
+var productsByCategory = from p in dbContext.Products
+                         group p by p.Category into g
+                         select new { Category = g.Key, Count = g.Count() };
+
+

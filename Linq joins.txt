@@ -1,0 +1,32 @@
+Retrieve all orders with their associated customer information:
+var ordersWithCustomers = from o in dbContext.Orders
+                          join c in dbContext.Customers on o.CustomerId equals c.Id
+                          select new { Order = o, Customer = c };
+
+Retrieve all products with their associated category information:
+var productsWithCategories = from p in dbContext.Products
+                             join c in dbContext.Categories on p.CategoryId equals c.Id
+                             select new { Product = p, Category = c };
+
+Retrieve all order products with their associated product and order information:
+var orderProductsWithOrderAndProduct = from op in dbContext.OrderProducts
+                                       join o in dbContext.Orders on op.OrderId equals o.Id
+                                       join p in dbContext.Products on op.ProductId equals p.Id
+                                       select new { OrderProduct = op, Order = o, Product = p };
+
+Retrieve all customers with their associated orders:
+var customersWithOrders = from c in dbContext.Customers
+                          join o in dbContext.Orders on c.Id equals o.CustomerId
+                          select new { Customer = c, Order = o };
+
+Retrieve all categories with their associated products:
+var categoriesWithProducts = from c in dbContext.Categories
+                             join p in dbContext.Products on c.Id equals p.CategoryId
+                             select new { Category = c, Product = p };
+
+Retrieve all orders with their associated order products and products:
+var ordersWithOrderProductsAndProducts = from o in dbContext.Orders
+                                         join op in dbContext.OrderProducts on o.Id equals op.OrderId
+                                         join p in dbContext.Products on op.ProductId equals p.Id
+                                         select new { Order = o, OrderProduct = op, Product = p };
+
